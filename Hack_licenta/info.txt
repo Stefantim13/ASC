@@ -1,1 +1,2 @@
 Vezi curs 7
+Modifici hexa-ul jne in hexa-ul lui je
