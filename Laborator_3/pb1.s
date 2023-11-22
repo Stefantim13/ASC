@@ -1,5 +1,7 @@
+#afla maximul dintr-un vector si nr de aparitii ale acestuia
+#dai gdb la eticheta exit si print (long) maxim , print (long) ap
 .data
-v: .long 4, 1, 3, 7, 2, 7, 7
+v: .long 4, 1, 8, 7, 8, 7, 7
 n: .long 7
 maxim: .long -1
 ap: .long 0

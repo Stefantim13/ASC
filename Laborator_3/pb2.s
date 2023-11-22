@@ -1,3 +1,4 @@
+#inverseaza un sir dat
 .data
 s: .ascii "ana are mere"
 t: .space 12
