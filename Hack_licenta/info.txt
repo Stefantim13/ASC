@@ -1,2 +1,7 @@
 Vezi curs 7
-Modifici hexa-ul jne in hexa-ul lui je
+pt a vedea structura unui program din c in assembly scrii (objdump -d *) (* - adica numele programului compilat) in acest 
+exemplu pe cbb. 
+Modifici hexa-ul jne in hexa-ul lui je (adica codul 75 din hexa in 74) cu hexeditor
+in 'cb' am executabilul programului orginal din c
+in 'cbb' am executabilul modificat
+
