@@ -11,13 +11,11 @@ afisare: .asciz "%d "
 main:
 
 #am citit numarul
-pusha
 push $x
 push $format_int
 call scanf
 pop %ebx
 pop %ebx
-popa
 
 start:
 
