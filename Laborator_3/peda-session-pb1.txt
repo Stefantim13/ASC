@@ -1,2 +1,2 @@
-break exit
+break main
 
