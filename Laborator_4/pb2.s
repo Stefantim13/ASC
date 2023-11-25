@@ -9,14 +9,13 @@ x: .space 4
 main:
 
 #citesc numar de nr
-pusha
 
+pusha
 pushl $n
 pushl $format_int
 call scanf
 popl %ebx
 popl %ebx
-
 popa
 
 lea v, %edi
@@ -29,13 +28,11 @@ mov n, %eax
 subl %ecx, %eax
 
 pusha
-
-pushl $x
+push $x
 pushl $format_int
 call scanf
 popl %ebx
 popl %ebx
-
 popa
 
 mov x, %edx

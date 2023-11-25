@@ -1,4 +1,0 @@
-1) se citeste un numar de la tastatura. Sa se afiseze toti div lui.
-2) Fie v un vector cu maxim 100 elem. Se citesc de la tastatura un numar si apoi n elem care se stocheaza in v.
-Sa se realizeze o parcugere a acestui vector
-si sa se afiseze toate nr div cu 2.
