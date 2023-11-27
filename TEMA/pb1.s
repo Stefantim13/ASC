@@ -1,6 +1,13 @@
 .data
 	ma: .space 2000
 	mb: .space 2000
+	w: .space 2000
+	r: .space 2000
+	s: .space 30
+	caz: .space 4
+	l: .space 4
+	u: .space 4
+	a: .space 4
 	p: .space 4
 	i: .space 4
 	j: .space 4
@@ -13,8 +20,9 @@
 	y: .space 4
 	k: .space 4
 	q: .space 4
+	formatString: .asciz "%s"
 	formatScanf: .asciz "%d"
-	formatPrintf: .asciz "%d "
+	formatPrintf: .asciz "%d"
 	formatSpace: .asciz "\n"
 .text
 
@@ -269,60 +277,159 @@ for_k:
 gata_k:
 
 
-# for afisare matrice
+## if pt cazuri --------------------------------------------------------------------------------------------------------------------------------
 
-movl $1, i
-for_linie:
+pusha
+push $caz
+push $formatScanf
+call scanf
+pop %ebx
+pop %ebx
+popa
 
-	movl i, %ecx
-	cmp %ecx, n
-	je exit
-	movl $1, j
+xor %eax, %eax
+cmp caz, %eax
+jne caz2
 
-	for_coloana:
-		movl j, %ecx
-		cmp %ecx, m
-		je cont
 
-		movl i, %eax
-		xor %edx, %edx
-		mull mm
-		addl j, %eax
+caz1:
 
-		lea ma, %edi
-		movl (%edi, %eax, 4), %edx
 
-		pusha
+pusha
+push $s
+push $formatString
+call scanf
+pop %ebx
+pop %ebx
+popa
 
-		push %edx
-		push $formatPrintf
-		call printf
-		pop %ebx
-		pop %ebx
+movl $0, i
+movl $0, u
+for_s:
 
-		pushl $0
-		call fflush
-		pop %ebx
-		popa
+lea s, %edi
+movl i, %ecx
+movb (%edi, %ecx, 1), %ah
+movb %ah, l
+xorb %ah, %ah
+cmp l, %ah
+je gata_s
 
-	incl j
-	jmp for_coloana
+movl $0, j
 
-	cont:
 
-	pusha
-	push $formatSpace
-	call printf
-	pop %ebx
+for_b2:
+mov l, %eax
+xor %edx, %edx
+cmp %edx, l
+je gata_b2
 
-	push $0
-	call fflush
-	pop %ebx
-	popa
 
+mov $2, %ebx
+divl %ebx
+mov %eax, l
+
+lea r, %edi
+movl j, %ecx
+
+movl %edx, (%edi,%ecx,4)
+
+
+incl j
+jmp for_b2
+gata_b2:
+
+
+movl j, %eax
+movl %eax, a
+for_adaug:
+movl $8, %ecx
+cmp a, %ecx
+je gata_adaug
+
+lea w, %edi
+movl u, %ecx
+mov $0, %eax
+movl %eax, (%edi, %ecx, 4)
+
+
+incl u
+incl a
+jmp for_adaug
+gata_adaug:
+
+decl j
+
+for_r:
+mov $-1, %eax
+cmp j, %eax
+je gata_r
+
+lea r, %edi
+movl j, %ecx
+movl (%edi, %ecx, 4), %eax
+
+lea w, %edi
+movl u, %ecx
+movl %eax, (%edi, %ecx, 4)
+
+
+incl u
+decl j
+jmp for_r
+gata_r:
 
 incl i
-jmp for_linie
+jmp for_s
+gata_s:
+
+
+movl $0, i
+
+afis:
+mov u, %ecx
+cmp %ecx, i
+je gata_afis
+
+xor %edx, %edx
+mov nn, %eax
+mull mm
+mov %eax, %ebx
+
+xor %edx, %edx
+mov i, %eax
+divl %ebx
+
+lea ma, %edi
+movl (%edi, %edx, 4), %ebx
+
+lea w, %edi
+movl i, %ecx
+movl (%edi, %ecx, 4), %eax
+xorl %ebx, %eax
+movl %eax, (%edi, %ecx, 4)
+
+
+pusha
+push %eax
+push $formatPrintf
+call printf
+pop %ebx
+pop %ebx
+
+push $0
+call fflush
+pop %ebx
+popa
+
+incl i
+jmp afis
+gata_afis:
+
+
+
+
+caz2:
 
 
 exit:
