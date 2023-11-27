@@ -66,7 +66,7 @@ main:
 et_for:
 	movl i, %ecx
 	cmp %ecx, p
-	je gata
+	je gata_for
 
 	pusha
 	push $x
@@ -98,7 +98,7 @@ et_for:
 	incl i
 	jmp et_for
 
-gata:
+gata_for:
 
 	pusha
 	pushl $k
@@ -276,13 +276,13 @@ for_linie:
 
 	movl i, %ecx
 	cmp %ecx, n
-	je exit
+	je gata_linie
 	movl $1, j
 
 	for_coloana:
 		movl j, %ecx
 		cmp %ecx, m
-		je cont
+		je gata_coloana
 
 		movl i, %eax
 		xor %edx, %edx
@@ -308,7 +308,7 @@ for_linie:
 	incl j
 	jmp for_coloana
 
-	cont:
+	gata_coloana:
 
 	pusha
 	push $formatSpace
@@ -323,7 +323,7 @@ for_linie:
 
 incl i
 jmp for_linie
-
+gata_linie:
 
 exit:
 	mov $1, %eax
