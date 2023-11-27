@@ -21,12 +21,15 @@
 	y: .space 4
 	k: .space 4
 	q: .space 4
+	st: .long -1
 	formatString: .asciz "%s"
 	formatScanf: .asciz "%d"
 	formatPrintf: .asciz "%d"
 	formatHexa: .asciz "%X"
+	formatScanfH: .asciz "%1X"
 	formatSpace: .asciz "\n"
 	format0x: .asciz "0x"
+	formatGarbage: .asciz "\n0x"
 .text
 
 .global main
@@ -479,9 +482,120 @@ popa
 jmp for_hexa
 gata_hexa:
 
-
-
+###########################################################################################################################################################################
 caz2:
+
+
+
+pusha
+pushl $formatGarbage
+call scanf
+popl %ebx
+popa
+
+
+movl $0, q
+for_cit:
+
+movl $-1, %eax
+mov %eax, x
+
+pusha
+pushl $x
+pushl $formatScanfH
+call scanf
+popl %ebx
+popl %ebx
+
+aici:
+
+movl x, %eax
+cmp st, %eax
+je gata_cit
+
+
+lea w, %edi
+mov q, %ecx
+addl $3, %ecx
+
+mov x, %eax
+xor %edx, %edx
+cmp %eax, %edx
+je continue
+
+movl $2, %ebx
+divl %ebx
+movl %edx, (%edi,%ecx,4)
+
+decl %ecx
+
+xor %edx, %edx
+cmp %eax, %edx
+je continue
+
+movl $2, %ebx
+divl %ebx
+movl %edx, (%edi,%ecx,4)
+
+decl %ecx
+
+xor %edx, %edx
+cmp %eax, %edx
+je continue
+
+movl $2, %ebx
+divl %ebx
+movl %edx, (%edi,%ecx,4)
+
+decl %ecx
+
+xor %edx, %edx
+cmp %eax, %edx
+je continue
+
+movl $2, %ebx
+divl %ebx
+movl %edx, (%edi,%ecx,4)
+
+
+continue:
+
+
+mov q, %eax
+addl $4, %eax
+mov %eax, q
+jmp for_cit
+gata_cit:
+
+
+
+movl $0, i
+
+for_afis:
+mov i, %eax
+cmp q, %eax
+je gata_afis
+
+lea w, %edi
+mov i, %ecx
+mov (%edi, %ecx, 4), %eax
+
+pusha
+push %eax
+push $formatPrintf
+call printf
+pop %ebx
+pop %ebx
+
+push $0
+call fflush
+pop %ebx
+popa
+
+incl i
+jmp for_afis
+gata_afis:
+
 
 
 exit:
