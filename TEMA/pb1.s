@@ -23,6 +23,7 @@
 	q: .space 4
 	st: .long -1
 	formatString: .asciz "%s"
+	formatChar: .asciz "%c"
 	formatScanf: .asciz "%d"
 	formatPrintf: .asciz "%d"
 	formatHexa: .asciz "%X"
@@ -571,18 +572,103 @@ gata_cit:
 
 movl $0, i
 
-for_afis:
+for_criptare:
 mov i, %eax
 cmp q, %eax
-je gata_afis
+je gata_criptare
+
+
+xor %edx, %edx
+mov nn, %eax
+mull mm
+mov %eax, %ebx
+
+xor %edx, %edx
+mov i, %eax
+divl %ebx
+
+lea ma, %edi
+movl (%edi, %edx, 4), %ebx
 
 lea w, %edi
-mov i, %ecx
-mov (%edi, %ecx, 4), %eax
+movl i, %ecx
+movl (%edi, %ecx, 4), %eax
+xorl %ebx, %eax
+movl %eax, (%edi, %ecx, 4)
+
+incl i
+jmp for_criptare
+gata_criptare:
+
+movl $0, i
+for_afisare:
+mov i, %eax
+cmp q, %eax
+je gata_afisare
+
+xorl %eax, %eax
+lea w, %edi
+
+movl i, %ecx
+movl (%edi, %ecx, 4), %ebx
+shl $7, %ebx
+addl %ebx, %eax
+
+incl i
+
+
+movl i, %ecx
+movl (%edi, %ecx, 4), %ebx
+shl $6, %ebx
+addl %ebx, %eax
+
+incl i
+
+
+movl i, %ecx
+movl (%edi, %ecx, 4), %ebx
+shl $5, %ebx
+addl %ebx, %eax
+
+incl i
+
+movl i, %ecx
+movl (%edi, %ecx, 4), %ebx
+shl $4, %ebx
+addl %ebx, %eax
+
+incl i
+
+movl i, %ecx
+movl (%edi, %ecx, 4), %ebx
+shl $3, %ebx
+addl %ebx, %eax
+
+incl i
+
+movl i, %ecx
+movl (%edi, %ecx, 4), %ebx
+shl $2, %ebx
+addl %ebx, %eax
+
+incl i
+
+movl i, %ecx
+movl (%edi, %ecx, 4), %ebx
+shl $1, %ebx
+addl %ebx, %eax
+
+incl i
+
+movl i, %ecx
+movl (%edi, %ecx, 4), %ebx
+addl %ebx, %eax
+
+incl i
 
 pusha
 push %eax
-push $formatPrintf
+push $formatChar
 call printf
 pop %ebx
 pop %ebx
@@ -592,10 +678,9 @@ call fflush
 pop %ebx
 popa
 
-incl i
-jmp for_afis
-gata_afis:
 
+jmp for_afisare
+gata_afisare:
 
 
 exit:

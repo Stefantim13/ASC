@@ -1,2 +1,2 @@
-break aici
+break gata_criptare
 
