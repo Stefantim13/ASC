@@ -483,6 +483,18 @@ popa
 jmp for_hexa
 gata_hexa:
 
+pusha
+push $formatSpace
+call printf
+pop %ebx
+
+push $0
+call fflush
+pop %ebx
+popa
+
+
+jmp exit
 ###########################################################################################################################################################################
 caz2:
 
@@ -681,6 +693,17 @@ popa
 
 jmp for_afisare
 gata_afisare:
+
+
+pusha
+push $formatSpace
+call printf
+pop %ebx
+
+push $0
+call fflush
+pop %ebx
+popa
 
 
 exit:
