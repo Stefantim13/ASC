@@ -8,6 +8,7 @@ alt: .asciz "0 "
 
 .global main
 main:
+
 mov $5, %eax
 mov $fileo, %ebx
 mov $2, %ecx
