@@ -1,4 +1,6 @@
 .data
+	g: .space 4
+	gg: .space 4
 	ma: .space 2000
 	mb: .space 2000
 	p: .space 4
@@ -13,28 +15,81 @@
 	y: .space 4
 	k: .space 4
 	q: .space 4
-	formatScanf: .asciz "%d"
+	zece: .long 10
 	formatPrintf: .asciz "%d "
 	formatSpace: .asciz "\n"
+	filei: .asciz "in.txt"
 .text
+
+
+citire:
+pushl %ebp
+mov %esp, %ebp
+
+mov $3, %eax
+mov %eax, %ebx
+mov $g, %ecx
+mov $1, %edx
+int $0x80
+
+movb g, %bl
+cmp $'\n', %bl
+je solved
+sub $'0', %bl
+movl %ebx, gg
+
+mov $3, %eax
+mov %eax, %ebx
+mov $g, %ecx
+mov $1, %edx
+int $0x80
+
+movl gg, %eax
+movb g, %bl
+cmp $'\n', %bl
+je solved
+sub $'0', %bl
+xor %edx, %edx
+mull zece
+addl %ebx, %eax
+movl %eax, gg
+
+mov $3, %eax
+mov %eax, %ebx
+mov $g, %ecx
+mov $1, %edx
+int $0x80
+
+
+solved:
+mov 8(%ebp), %ebx
+movl gg, %eax
+movl %eax, (%ebx)
+
+popl %ebp
+ret
+
 
 .global main
 main:
+	#deschid fisieru
+
+	mov $5, %eax
+	mov $filei, %ebx
+	mov $0, %ecx
+	int $0x80
+
 
 	#citesc n si m
 	pusha
 	push $n
-	push $formatScanf
-	call scanf
-	pop %ebx
+	call citire
 	pop %ebx
 	popa
 
 	pusha
 	push $m
-	push $formatScanf
-	call scanf
-	pop %ebx
+	call citire
 	pop %ebx
 	popa
 
@@ -52,9 +107,7 @@ main:
 
 	pusha
 	push $p
-	push $formatScanf
-	call scanf
-	pop %ebx
+	call citire
 	pop %ebx
 	popa
 
@@ -70,17 +123,13 @@ et_for:
 
 	pusha
 	push $x
-	push $formatScanf
-	call scanf
-	pop %ebx
+	call citire
 	pop %ebx
 	popa
 
 	pusha
 	push $y
-	push $formatScanf
-	call scanf
-	pop %ebx
+	call citire
 	pop %ebx
 	popa
 
@@ -102,9 +151,7 @@ gata_for:
 
 	pusha
 	pushl $k
-	pushl $formatScanf
-	call scanf
-	pop %ebx
+	call citire
 	pop %ebx
 	popa
 
@@ -324,6 +371,15 @@ for_linie:
 incl i
 jmp for_linie
 gata_linie:
+
+
+
+#inchid fisieru de citire
+
+mov $6, %eax
+mov %eax, %ebx
+int $0x80
+
 
 exit:
 	mov $1, %eax
