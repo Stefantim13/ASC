@@ -1,34 +1,57 @@
 .data
 g: .space 4
+gg: .space 4
 a: .space 4
 b: .space 4
 s: .space 4
+d: .space 4
 zece: .long 10
 format: .asciz "%d"
+file: .asciz "in.txt"
 .text
 
 citire:
 pushl %ebp
 mov %esp, %ebp
 
-xor %eax, %eax
-movb 8(%ebp), %bl
+mov $3, %eax
+mov %eax, %ebx
+mov $g, %ecx
+mov $1, %edx
+int $0x80
+
+movb g, %bl
 cmp $'\n', %bl
 je solved
 sub $'0', %bl
-add %ebx, %eax
+movl %ebx, gg
 
+mov $3, %eax
+mov %eax, %ebx
+mov $g, %ecx
+mov $1, %edx
+int $0x80
 
-movb 9(%ebp), %bl
+movl gg, %eax
+movb g, %bl
 cmp $'\n', %bl
 je solved
 sub $'0', %bl
 xor %edx, %edx
 mull zece
 addl %ebx, %eax
+movl %eax, gg
+
+mov $3, %eax
+mov %eax, %ebx
+mov $g, %ecx
+mov $1, %edx
+int $0x80
+
 
 solved:
-mov 12(%ebp), %ebx
+mov 8(%ebp), %ebx
+movl gg, %eax
 movl %eax, (%ebx)
 
 popl %ebp
@@ -36,37 +59,26 @@ ret
 .global main
 main:
 
-movl $3, %eax
-movl $2, %ebx
-movl $g, %ecx
-movl $4, %edx
+mov $5, %eax
+mov $file, %ebx
+mov $0, %ecx
 int $0x80
+
+start:
 
 pusha
 pushl $a
-pushl g
 call citire
 popl %ebx
-popl %ebx
 popa
-
-
-movl $3, %eax
-movl $2, %ebx
-movl $g, %ecx
-movl $4, %edx
-int $0x80
 
 
 pusha
 pushl $b
-pushl g
 call citire
-popl %ebx
 popl %ebx
 popa
 
-start:
 movl a, %eax
 movl b, %ebx
 addl %ebx, %eax
@@ -74,12 +86,24 @@ addl %ebx, %eax
 movl %eax, s
 
 
-movl $4, %eax
-movl $1, %ebx
-movl $s, %ecx
-movl $4, %edx
-int $0x80
+pusha
 
+pushl s
+pushl $format
+call printf
+popl %ebx
+popl %ebx
+
+push $0
+call fflush
+pop %ebx
+
+popa
+
+
+mov $6, %eax
+mov %eax, %ebx
+int $0x80
 exit:
 movl $1, %eax
 xor %ebx, %ebx
