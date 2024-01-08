@@ -1,6 +1,4 @@
 .data
-	g: .space 4
-	gg: .space 4
 	ma: .space 2000
 	mb: .space 2000
 	p: .space 4
@@ -15,119 +13,49 @@
 	y: .space 4
 	k: .space 4
 	q: .space 4
-	zece: .long 10
-	zero: .asciz "0 "
-	unu: .asciz "1 "
+	formatScanf: .asciz "%d"
+	formatPrintf: .asciz "%d "
 	formatSpace: .asciz "\n"
-	filei: .asciz "in.txt"
-	fileo: .asciz "out.txt"
+	in: .asciz "in.txt"
+	out: .asciz "out.txt"
+	read: .asciz "r"
+	write: .asciz "w"
 .text
-
-
-citire:
-pushl %ebp
-mov %esp, %ebp
-
-mov $3, %eax
-mov %eax, %ebx
-mov $g, %ecx
-mov $1, %edx
-int $0x80
-
-movb g, %bl
-cmp $'\n', %bl
-je solved
-sub $'0', %bl
-movl %ebx, gg
-
-mov $3, %eax
-mov %eax, %ebx
-mov $g, %ecx
-mov $1, %edx
-int $0x80
-
-movl gg, %eax
-movb g, %bl
-cmp $'\n', %bl
-je solved
-sub $'0', %bl
-xor %edx, %edx
-mull zece
-addl %ebx, %eax
-movl %eax, gg
-
-mov $3, %eax
-mov %eax, %ebx
-mov $g, %ecx
-mov $1, %edx
-int $0x80
-
-
-solved:
-mov 8(%ebp), %ebx
-movl gg, %eax
-movl %eax, (%ebx)
-
-popl %ebp
-ret
-
-afisare_0:
-
-mov $4, %eax
-mov %eax, %ebx
-mov $zero, %ecx
-mov $2, %edx
-int $0x80
-
-ret
-
-afisare_1:
-
-mov $4, %eax
-mov %eax, %ebx
-mov $unu, %ecx
-mov $2, %edx
-int $0x80
-
-ret
-
-enter:
-
-mov $4, %eax
-mov %eax, %ebx
-mov $formatSpace, %ecx
-mov $1, %edx
-int $0x80
-
-ret
 
 .global main
 main:
-	#deschid fisieru
+	#freopen("in.txt", "r", stdin)
+	push stdin
+	push $read
+	push $in
+	call freopen
+	pop %ebx
+	pop %ebx
+	pop %ebx
 
-	mov $5, %eax
-	mov $filei, %ebx
-	mov $0, %ecx
-	int $0x80
-
-	mov $5, %eax
-	mov $fileo, %ebx
-	mov $2, %ecx
-	int $0x80
-
-	start:
-	mov %eax, %ebx
-
+	#freopen("out.txt", "w", stdout)
+	push stdout
+	push $write
+	push $out
+	call freopen
+	pop %ebx
+	pop %ebx
+	pop %ebx
+	
 	#citesc n si m
 	pusha
 	push $n
-	call citire
+	push $formatScanf
+	call scanf
+	pop %ebx
 	pop %ebx
 	popa
 
 	pusha
 	push $m
-	call citire
+	push $formatScanf
+	call scanf
+	pop %ebx
 	pop %ebx
 	popa
 
@@ -145,7 +73,9 @@ main:
 
 	pusha
 	push $p
-	call citire
+	push $formatScanf
+	call scanf
+	pop %ebx
 	pop %ebx
 	popa
 
@@ -161,13 +91,17 @@ et_for:
 
 	pusha
 	push $x
-	call citire
+	push $formatScanf
+	call scanf
+	pop %ebx
 	pop %ebx
 	popa
 
 	pusha
 	push $y
-	call citire
+	push $formatScanf
+	call scanf
+	pop %ebx
 	pop %ebx
 	popa
 
@@ -189,7 +123,9 @@ gata_for:
 
 	pusha
 	pushl $k
-	call citire
+	pushl $formatScanf
+	call scanf
+	pop %ebx
 	pop %ebx
 	popa
 
@@ -377,38 +313,38 @@ for_linie:
 		lea ma, %edi
 		movl (%edi, %eax, 4), %edx
 
-		xor %eax, %eax
-		cmp %edx, %eax
-		je e_zero
+		pusha
 
-		call afisare_1
+		push %edx
+		push $formatPrintf
+		call printf
+		pop %ebx
+		pop %ebx
 
-		jmp e_unu
-		e_zero:
-
-		call afisare_0
-		e_unu:
+		pushl $0
+		call fflush
+		pop %ebx
+		popa
 
 	incl j
 	jmp for_coloana
 
 	gata_coloana:
 
-	call enter
+	pusha
+	push $formatSpace
+	call printf
+	pop %ebx
+
+	push $0
+	call fflush
+	pop %ebx
+	popa
 
 
 incl i
 jmp for_linie
 gata_linie:
-
-
-
-#inchid fisieru de citire
-
-mov $6, %eax
-mov %eax, %ebx
-int $0x80
-
 
 exit:
 	mov $1, %eax
